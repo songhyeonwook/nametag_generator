@@ -233,7 +233,7 @@ button:disabled {
 .page-preview {
   position: relative;
   width: 100%;
-  aspect-ratio: 1.414 / 1;
+  aspect-ratio: 297 / 210;
   margin-bottom: 18px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
@@ -245,29 +245,27 @@ button:disabled {
   overflow: hidden;
 }
 
-.template-preview {
+.empty-preview {
   display: grid;
   place-items: center;
-  min-height: 250px;
-  margin-bottom: 18px;
-  border: 1px dashed #cbd5e1;
-  border-radius: 8px;
-  background: #fff;
-  color: #111827;
-  text-align: center;
-  padding: 24px;
 }
 
-.template-preview strong {
+.empty-preview-content {
+  max-width: 460px;
+  padding: 24px;
+  color: #111827;
+  text-align: center;
+}
+
+.empty-preview-content strong {
   display: block;
   color: var(--ink);
   font-size: 18px;
   margin-bottom: 10px;
 }
 
-.template-preview span {
+.empty-preview-content span {
   display: block;
-  max-width: 460px;
   color: var(--muted);
   line-height: 1.6;
 }
@@ -276,7 +274,7 @@ button:disabled {
   width: min(68%, 430px);
   margin-right: auto;
   margin-left: auto;
-  aspect-ratio: 1 / 1.414;
+  aspect-ratio: 210 / 297;
 }
 
 .preview-tag {

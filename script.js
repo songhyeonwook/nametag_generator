@@ -162,10 +162,12 @@ function updatePreview() {
 }
 
 function renderEmptyPagePreview(title, message) {
-  els.pagePreview.className = "template-preview";
+  els.pagePreview.className = `page-preview empty-preview ${els.orientationSelect.value}`;
   els.pagePreview.innerHTML = `
-    <strong>${escapeHtml(title)}</strong>
-    <span>${escapeHtml(message)}</span>
+    <div class="empty-preview-content">
+      <strong>${escapeHtml(title)}</strong>
+      <span>${escapeHtml(message)}</span>
+    </div>
   `;
 }
 
