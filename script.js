@@ -514,7 +514,7 @@ async function generateFromTemplate() {
     console.error(error);
     alert(`명찰 PPTX 생성에 실패했습니다.\n\n${error.message || error}`);
   } finally {
-    els.generateButton.textContent = "명찰 PPTX 생성";
+    els.generateButton.textContent = "PPTX 생성";
     updatePreview();
   }
 }
@@ -531,9 +531,9 @@ function downloadBlob(blob, filename) {
 function downloadSampleCsv() {
   const rows = [
     ["회사명", "부서", "이름"],
-    ["LOTTE", "마케팅팀", "김하나"],
-    ["LOTTE", "영업팀", "이도윤"],
-    ["LOTTE", "인사팀", "박서연"],
+    ["회사 A", "마케팅팀", "김하나"],
+    ["회사 A", "영업팀", "이도윤"],
+    ["회사 B", "인사팀", "박서연"],
   ];
   const csv = rows.map((row) => row.map((cell) => `"${cell}"`).join(",")).join("\n");
   const blob = new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8" });

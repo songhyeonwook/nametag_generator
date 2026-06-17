@@ -248,13 +248,12 @@ def read_template_bytes(uploaded_template) -> bytes:
 def main() -> None:
     import streamlit as st
 
-    st.set_page_config(page_title="Nametag Generator", page_icon="🏢")
+    st.set_page_config(page_title="Nametag Generator")
     
-    # 상단 로고 및 타이틀 커스텀
     st.markdown("""
-    <div style="text-align: center; padding: 20px 0;">
-        <h1 style="color: #da291c; font-family: 'Arial Black', sans-serif; margin-bottom: 0;">LOTTE</h1>
-        <h3 style="color: #555; margin-top: 5px;">Nametag Generator</h3>
+    <div style="text-align: center; padding: 16px 0 20px;">
+        <h1 style="color: #171717; font-family: Arial, sans-serif; margin-bottom: 0;">명찰 생성기</h1>
+        <p style="color: #6b7280; margin-top: 8px;">Nametag Generator</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -404,8 +403,8 @@ def main() -> None:
                     top: {dy}px;
                     width: {nametag_disp_w}px;
                     height: {nametag_disp_h}px;
-                    background-color: #fff5f5;
-                    border: 2px dashed #da291c;
+                    background-color: #ffffff;
+                    border: 1px dashed #9ca3af;
                     border-radius: 4px;
                     display: flex;
                     align-items: center;
@@ -414,7 +413,7 @@ def main() -> None:
                     text-align: center;
                     font-size: {base_font_size}px;
                     font-weight: bold;
-                    color: #da291c;
+                    color: #111827;
                     padding: 10px;
                     box-sizing: border-box;
                     overflow: hidden;
