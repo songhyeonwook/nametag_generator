@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LOTTE Nametag Generator</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="brand">LOTTE</p>
+          <h1>Nametag Generator</h1>
+        </div>
+        <p class="header-copy">
+          Excel 또는 CSV 명단을 브라우저에서 처리해 인쇄용 명찰 PPTX를 생성합니다.
+        </p>
+      </header>
+
+      <section class="workspace">
+        <div class="panel controls-panel">
+          <section class="control-section">
+            <h2>1. 명단 업로드</h2>
+            <label class="file-drop" for="fileInput">
+              <span class="file-title">Excel/CSV 파일 선택</span>
+              <span id="fileName" class="file-name">아직 선택된 파일이 없습니다.</span>
+            </label>
+            <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" />
+            <p class="hint">컬럼 예시: 회사명, 부서, 이름</p>
+          </section>
+
+          <section class="control-section">
+            <h2>2. 템플릿 업로드</h2>
+            <label class="file-drop" for="templateInput">
+              <span class="file-title">PPTX 템플릿 선택</span>
+              <span id="templateName" class="file-name">첫 번째 슬라이드를 명찰 템플릿으로 사용합니다.</span>
+            </label>
+            <input id="templateInput" type="file" accept=".pptx" />
+            <p class="hint">사용 가능 플레이스홀더: {{company}}, {{department}}, {{name}}, {{dept_name}}</p>
+          </section>
+
+          <section class="control-section">
+            <h2>3. 컬럼 매핑</h2>
+            <div class="field-grid">
+              <label>
+                회사명 컬럼
+                <select id="companySelect"></select>
+              </label>
+              <label>
+                부서 컬럼
+                <select id="departmentSelect"></select>
+              </label>
+              <label>
+                이름 컬럼
+                <select id="nameSelect"></select>
+              </label>
+            </div>
+          </section>
+
+          <section class="control-section">
+            <h2>4. 출력 옵션</h2>
+            <div class="field-grid">
+              <label>
+                용지 방향
+                <select id="orientationSelect">
+                  <option value="landscape">가로</option>
+                  <option value="portrait">세로</option>
+                </select>
+              </label>
+              <label>
+                명찰 배열
+                <select id="gridSelect">
+                  <option>1x1</option>
+                  <option>1x2</option>
+                  <option>2x1</option>
+                  <option>1x3</option>
+                  <option>3x1</option>
+                  <option>1x4</option>
+                  <option>4x1</option>
+                  <option selected>2x2</option>
+                  <option>2x3</option>
+                  <option>3x2</option>
+                  <option>2x4</option>
+                  <option>4x2</option>
+                  <option>3x3</option>
+                </select>
+              </label>
+              <label>
+                인당 출력 개수
+                <input id="copyInput" type="number" min="1" max="10" value="1" />
+              </label>
+            </div>
+            <p class="hint">템플릿 첫 슬라이드를 축소하여 A4 한 페이지에 여러 명찰로 배치합니다.</p>
+          </section>
+
+          <div class="actions">
+            <button id="sampleButton" type="button" class="secondary-button">샘플 CSV 다운로드</button>
+            <button id="generateButton" type="button" class="primary-button" disabled>
+              명찰 PPTX 생성
+            </button>
+          </div>
+        </div>
+
+        <div class="panel preview-panel">
+          <div class="preview-header">
+            <div>
+              <h2>미리보기</h2>
+              <p id="summaryText">명단과 PPTX 템플릿을 업로드하면 생성 정보가 표시됩니다.</p>
+            </div>
+            <span id="countBadge" class="count-badge">0명</span>
+          </div>
+
+          <div id="pagePreview" class="template-preview" aria-label="템플릿 다중 배치 방식 안내">
+            <strong>A4 다중 명찰 배치</strong>
+            <span>업로드한 PPTX의 1번 슬라이드 전체를 축소 복제하고, 각 명찰의 플레이스홀더만 치환합니다.</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>회사명</th>
+                  <th>부서</th>
+                  <th>이름</th>
+                </tr>
+              </thead>
+              <tbody id="previewTable">
+                <tr>
+                  <td colspan="3">표시할 데이터가 없습니다.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
