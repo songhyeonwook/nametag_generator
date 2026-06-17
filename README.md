@@ -52,7 +52,7 @@ PowerPoint에서 명찰 디자인을 만들고 첫 번째 슬라이드에 아래
 4. `Actions` 탭에서 `Deploy GitHub Pages` 워크플로가 성공하면 아래 주소로 접속할 수 있습니다.
 
 ```text
-https://songhyeonwook.github.io/nametay_generator/
+https://songhyeonwook.github.io/nametag_generator/
 ```
 
 ## Streamlit/Python 버전
