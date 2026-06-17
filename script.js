@@ -2,6 +2,7 @@ const state = {
   rows: [],
   columns: [],
   templateFile: null,
+  templateSize: null,
 };
 
 const EMU_PER_CM = 360000;
@@ -25,6 +26,7 @@ const els = {
   sampleButton: document.querySelector("#sampleButton"),
   summaryText: document.querySelector("#summaryText"),
   countBadge: document.querySelector("#countBadge"),
+  pagePreview: document.querySelector("#pagePreview"),
   previewTable: document.querySelector("#previewTable"),
 };
 
@@ -137,7 +139,7 @@ function getOutputLayout(templateSize) {
 
 function updatePreview() {
   const attendees = getAttendees();
-  const hasTemplate = Boolean(state.templateFile);
+  const hasTemplate = Boolean(state.templateFile && state.templateSize);
   const { cols, rows } = parseGrid();
   const perPage = cols * rows;
   const pageCount = attendees.length ? Math.ceil(attendees.length / perPage) : 0;
@@ -155,7 +157,74 @@ function updatePreview() {
     els.summaryText.textContent = `총 ${attendees.length}개 명찰을 ${cols}x${rows} 배열로 배치하여 ${pageCount}페이지를 생성합니다.`;
   }
 
+  renderPagePreview(attendees);
   renderTable(attendees);
+}
+
+function renderEmptyPagePreview(title, message) {
+  els.pagePreview.className = "template-preview";
+  els.pagePreview.innerHTML = `
+    <strong>${escapeHtml(title)}</strong>
+    <span>${escapeHtml(message)}</span>
+  `;
+}
+
+function toPercent(value, total) {
+  return `${((value / total) * 100).toFixed(4)}%`;
+}
+
+function renderPagePreview(attendees) {
+  if (!state.rows.length && !state.templateFile) {
+    renderEmptyPagePreview(
+      "A4 다중 명찰 배치",
+      "명단과 PPTX 템플릿을 업로드하면 첫 페이지 배치가 표시됩니다.",
+    );
+    return;
+  }
+
+  if (!state.rows.length) {
+    renderEmptyPagePreview("명단 대기", "Excel 또는 CSV 명단을 업로드하면 미리보기가 표시됩니다.");
+    return;
+  }
+
+  if (!state.templateFile || !state.templateSize) {
+    renderEmptyPagePreview("템플릿 대기", "PPTX 템플릿을 업로드하면 A4 배치 미리보기가 표시됩니다.");
+    return;
+  }
+
+  if (!attendees.length) {
+    renderEmptyPagePreview("표시할 데이터 없음", "회사명, 부서, 이름이 모두 채워진 행을 찾지 못했습니다.");
+    return;
+  }
+
+  const layout = getOutputLayout(state.templateSize);
+  const pageAttendees = attendees.slice(0, layout.perPage);
+  els.pagePreview.className = `page-preview ${els.orientationSelect.value}`;
+  els.pagePreview.innerHTML = "";
+
+  pageAttendees.forEach((attendee, index) => {
+    const row = Math.floor(index / layout.cols);
+    const col = index % layout.cols;
+    const left = Math.round(col * layout.cellWidth + (layout.cellWidth - layout.tagWidth) / 2);
+    const top = Math.round(row * layout.cellHeight + (layout.cellHeight - layout.tagHeight) / 2);
+
+    const tag = document.createElement("div");
+    tag.className = "preview-tag";
+    tag.style.left = toPercent(left, layout.page.width);
+    tag.style.top = toPercent(top, layout.page.height);
+    tag.style.width = toPercent(layout.tagWidth, layout.page.width);
+    tag.style.height = toPercent(layout.tagHeight, layout.page.height);
+    tag.innerHTML = `
+      <strong>${escapeHtml(attendee.company)}</strong>
+      <span>${escapeHtml(attendee.dept_name)}</span>
+    `;
+    els.pagePreview.appendChild(tag);
+  });
+
+  const info = document.createElement("div");
+  info.className = "preview-page-info";
+  info.textContent = `1페이지 / ${layout.cols}x${layout.rows}`;
+  els.pagePreview.appendChild(info);
 }
 
 function renderTable(attendees) {
@@ -211,7 +280,13 @@ async function handleFileUpload(event) {
   }
 }
 
-function handleTemplateUpload(event) {
+async function handleTemplateUpload(event) {
+  if (!hasZipLibrary()) {
+    alert("PPTX 처리 라이브러리를 불러오지 못했습니다. 인터넷 연결 또는 CDN 차단 여부를 확인하세요.");
+    event.target.value = "";
+    return;
+  }
+
   const file = event.target.files?.[0];
   if (!file) return;
   if (!file.name.toLowerCase().endsWith(".pptx")) {
@@ -220,9 +295,27 @@ function handleTemplateUpload(event) {
     return;
   }
 
-  state.templateFile = file;
-  els.templateName.textContent = file.name;
-  updatePreview();
+  try {
+    const zip = await window.JSZip.loadAsync(await file.arrayBuffer());
+    const presentationXmlFile = zip.file("ppt/presentation.xml");
+    if (!presentationXmlFile) {
+      throw new Error("PPTX 구조를 읽지 못했습니다.");
+    }
+
+    const presentationXml = await presentationXmlFile.async("string");
+    state.templateFile = file;
+    state.templateSize = getPresentationSize(presentationXml);
+    els.templateName.textContent = file.name;
+    updatePreview();
+  } catch (error) {
+    console.error(error);
+    state.templateFile = null;
+    state.templateSize = null;
+    els.templateName.textContent = "첫 번째 슬라이드를 명찰 템플릿으로 사용합니다.";
+    event.target.value = "";
+    alert(`템플릿을 읽지 못했습니다.\n\n${error.message || error}`);
+    updatePreview();
+  }
 }
 
 function replacePlaceholders(slideXml, attendee) {

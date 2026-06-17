@@ -235,12 +235,13 @@ button:disabled {
   width: 100%;
   aspect-ratio: 1.414 / 1;
   margin-bottom: 18px;
-  border: 2px solid #c7cdd4;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
   background:
-    linear-gradient(90deg, rgba(216, 222, 228, 0.55) 1px, transparent 1px),
-    linear-gradient(rgba(216, 222, 228, 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(229, 231, 235, 0.8) 1px, transparent 1px),
+    linear-gradient(rgba(229, 231, 235, 0.8) 1px, transparent 1px),
     #fff;
-  background-size: 32px 32px;
+  background-size: 28px 28px;
   overflow: hidden;
 }
 
@@ -283,12 +284,13 @@ button:disabled {
   display: grid;
   place-items: center;
   padding: 8px;
-  border: 1px dashed var(--border-color, #9ca3af);
-  border-radius: 5px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
   background: var(--tag-bg, #ffffff);
   color: var(--tag-color, #111827);
   text-align: center;
   overflow: hidden;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
 .preview-tag strong {
@@ -307,9 +309,22 @@ button:disabled {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #2f353b;
+  color: #4b5563;
   font-size: clamp(10px, 1.5vw, 14px);
-  font-weight: 800;
+  font-weight: 700;
+}
+
+.preview-page-info {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .table-wrap {
