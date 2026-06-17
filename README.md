@@ -44,12 +44,13 @@ PowerPoint에서 명찰 디자인을 만들고 첫 번째 슬라이드에 아래
 
 ### GitHub Pages 배포 방법
 
-이 저장소에는 GitHub Actions 배포 워크플로가 포함되어 있습니다.
+이 저장소는 `gh-pages` 브랜치에 정적 파일을 배포합니다.
 
 1. 이 폴더의 파일을 GitHub 저장소에 커밋하고 `main` 브랜치로 푸시합니다.
 2. GitHub 저장소에서 `Settings` > `Pages`로 이동합니다.
-3. `Build and deployment`의 `Source`를 `GitHub Actions`로 선택합니다.
-4. `Actions` 탭에서 `Deploy GitHub Pages` 워크플로가 성공하면 아래 주소로 접속할 수 있습니다.
+3. `Build and deployment`의 `Source`를 `Deploy from a branch`로 선택합니다.
+4. 브랜치는 `gh-pages`, 폴더는 `/root`를 선택합니다.
+5. 저장하면 아래 주소로 접속할 수 있습니다.
 
 ```text
 https://songhyeonwook.github.io/nametag_generator/
